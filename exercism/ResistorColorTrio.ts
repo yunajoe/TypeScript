@@ -31,7 +31,7 @@ function decodedResistorValue(strArr: Color[]) {
   return calculateResult(result);
 }
 
-// other solution
+// sol2)
 /*
 enum Colors {
   black,
@@ -67,6 +67,69 @@ function decodedResistorValue([color1, color2, color3]: Color[]) {
   const value = (Colors[color1] * 10 + Colors[color2]) * 10 ** Colors[color3];
   const { result, unit } = calResult(value);
   return `${result} ${unit}`;
+} 
+*/
+
+// sol3)
+/*    
+enum ColorEnum {
+black,  
+brown,  
+red, 
+orange, 
+yellow, 
+green, 
+blue,
+violet, 
+grey, 
+white,
 }
 
+type Color = keyof typeof ColorEnum   
+
+const units = ["ohms", "kiloohms", "megaohms", "gigaohms"]
+
+function calValue(value:number){
+    let unit =0;
+    while(value>=1000){
+      value = value/1000
+      unit +=1 
+    }
+    return{
+        value: value,
+        unit: unit
+    }
+}
+function decodedResistorValue([color1, color2, color3]:Color[]) {
+    let result = (ColorEnum[color1] * 10 + ColorEnum[color2]) * (10 ** ColorEnum[color3])
+    const {value, unit} = calValue(result)   
+    return `${value} ${units[unit]}`  
+ 
+}   
+
+*/
+
+// sol4)
+/*    
+const ColorArray =
+  [`black`,
+    `brown`,
+    `red`,
+    `orange`,
+    `yellow`,
+    `green`,
+    `blue`,
+    `violet`,
+    `grey`,
+    `white`,] as const 
+
+type Color = typeof ColorArray[number]
+
+const ohmns = [[1000000000, "giga"], [1000000, "mega"], [1000, "kilo"]] as const
+
+ function decodedResistorValue([color1, color2, color3]: Color[])  {
+  let result = (ColorArray.indexOf(color1) * 10  + ColorArray.indexOf(color2)) * (10 ** ColorArray.indexOf(color3))
+  const [nums, unit] = ohmns.find(([value, unit])=> result >= value) ?? [1, "ohmns"]
+  return `${result/nums} ${unit}`  
+}  
 */
